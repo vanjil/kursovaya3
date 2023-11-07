@@ -3,15 +3,13 @@ from datetime import datetime
 
 def get_data(filename):
     with open(filename, 'r', encoding='UTF-8') as file:
-
         data = json.load(file)
         return data
-
 
 def get_operations_executed(data):
     operations_executed = []
     for operation in data:
-        if 'state' in operation and operation ['state'] == 'EXECUTED':
+        if 'state' in operation and operation['state'] == 'EXECUTED':
             operations_executed.append(operation)
     operations_with_from = []
     for operation in operations_executed:
@@ -24,14 +22,12 @@ def get_last_operations(operations_with_from, num_of_operations):
     last_operations = operations_sort[:num_of_operations]
     return last_operations
 
-
-
-def get_operations_formatted(last_operations: object) -> object:
+def get_operations_formatted(last_operations):
     operations_formatted_list = []
     for operation in last_operations:
         data = datetime.strptime(operation['date'], '%Y-%m-%dT%H:%M:%S.%f').strftime('%d-%m-%Y')
         description = operation['description']
-        payer_info, payment_method = "", ""
+        payer_info, payment_method_from = "", ""  # Инициализируем payment_method_from
         if "from" in operation:
             payer = operation["from"].split()
             payment_method = payer.pop(-1)
@@ -51,15 +47,3 @@ def get_operations_formatted(last_operations: object) -> object:
             """
         )
     return operations_formatted_list
-
-
-
-
-
-
-
-
-
-
-
-
